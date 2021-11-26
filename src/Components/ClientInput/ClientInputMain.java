@@ -27,39 +27,39 @@ public class ClientInputMain {
 			try {
 				switch (new BufferedReader(new InputStreamReader(System.in)).readLine().trim()) {
 				case "1":
-					eventBus.sendEvent(new Event(EventId.ListStudents, null));
-					printLogSend(EventId.ListStudents);
+					eventBus.sendEvent(new Event(EventId.Student, null, "get"));
+					printLogSend(EventId.Student);
 					break;
 				case "2":
-					eventBus.sendEvent(new Event(EventId.ListCourses, null));
-					printLogSend(EventId.ListCourses);
+					eventBus.sendEvent(new Event(EventId.Course, null, "get"));
+					printLogSend(EventId.Course);
 					break;
 				case "3":
-					eventBus.sendEvent(new Event(EventId.RegisterStudents, makeStudentInfo()));
-					printLogSend(EventId.RegisterStudents);
+					eventBus.sendEvent(new Event(EventId.Student, makeStudentInfo(), "post"));
+					printLogSend(EventId.Student);
 					break;
 				case "4":
-					eventBus.sendEvent(new Event(EventId.RegisterCourses, makeCourseInfo()));
-					printLogSend(EventId.RegisterCourses);
+					eventBus.sendEvent(new Event(EventId.Course, makeCourseInfo(), "post"));
+					printLogSend(EventId.Course);
 					break;
 				case "5":
-					eventBus.sendEvent(new Event(EventId.DeleteStudents, deleteStudent()));
-					printLogSend(EventId.DeleteStudents);
+					eventBus.sendEvent(new Event(EventId.Student, deleteStudent(), "delete"));
+					printLogSend(EventId.Student);
 					break;
 				case "6":
-					eventBus.sendEvent(new Event(EventId.DeleteCourses, deleteCourse()));
-					printLogSend(EventId.DeleteCourses);
+					eventBus.sendEvent(new Event(EventId.Course, deleteCourse(), "delete"));
+					printLogSend(EventId.Course);
 					break;
 				case "7":
-					eventBus.sendEvent(new Event(EventId.ListReservations, null));
-					printLogSend(EventId.ListReservations);
+					eventBus.sendEvent(new Event(EventId.Reservation, null, "get"));
+					printLogSend(EventId.Reservation);
 					break;
 				case "8":
-					eventBus.sendEvent(new Event(EventId.RegisterReservation, makeReservationInfo()));
-					printLogSend(EventId.RegisterReservation);
+					eventBus.sendEvent(new Event(EventId.Reservation, makeReservationInfo(), "post"));
+					printLogSend(EventId.Reservation);
 					break;
 				case "0":
-					eventBus.sendEvent(new Event(EventId.QuitTheSystem, "Quit the system!!!"));
+					eventBus.sendEvent(new Event(EventId.QuitTheSystem, "Quit the system!!!", "quit"));
 					printLogSend(EventId.QuitTheSystem);
 					eventBus.unRegister(componentId);
 					done = true;

@@ -31,20 +31,20 @@ public class CourseMain {
 			EventQueue eventQueue = eventBus.getEventQueue(componentId);
 			for (int i = 0; i < eventQueue.getSize(); i++) {
 				event = eventQueue.getEvent();
-				switch (event.getEventId()) {
-				case ListCourses:
+				switch (event.getApi()) {
+				case "get":
 					printLogEvent("Get", event);
 					eventBus.sendEvent(new Event(EventId.ClientOutput, makeCourseList(coursesList)));
 					break;
-				case RegisterCourses:
+				case "post":
 					printLogEvent("Get", event);
 					eventBus.sendEvent(new Event(EventId.ClientOutput, registerCourse(coursesList, event.getMessage())));
 					break;
-				case DeleteCourses:
+				case "delete":
 					printLogEvent("Get", event);
 					eventBus.sendEvent(new Event(EventId.ClientOutput, deleteCourse(coursesList, event.getMessage())));
 					break;
-				case QuitTheSystem:
+				case "quit":
 					eventBus.unRegister(componentId);
 					done = true;
 					break;

@@ -32,20 +32,20 @@ public class StudentMain {
 			EventQueue eventQueue = eventBus.getEventQueue(componentId);
 			for (int i = 0; i < eventQueue.getSize(); i++) {
 				event = eventQueue.getEvent();
-				switch (event.getEventId()) {
-				case ListStudents:
+				switch (event.getApi()) {
+				case "get":
 					printLogEvent("Get", event);
 					eventBus.sendEvent(new Event(EventId.ClientOutput, makeStudentList(studentsList)));
 					break;
-				case RegisterStudents:
+				case "post":
 					printLogEvent("Get", event);
 					eventBus.sendEvent(new Event(EventId.ClientOutput, registerStudent(studentsList, event.getMessage())));
 					break;
-				case DeleteStudents:
+				case "delete":
 					printLogEvent("Get", event);
 					eventBus.sendEvent(new Event(EventId.ClientOutput, deleteStudent(studentsList, event.getMessage())));
 					break;
-				case QuitTheSystem:
+				case "quit":
 					printLogEvent("Get", event);
 					eventBus.unRegister(componentId);
 					done = true;
@@ -56,6 +56,7 @@ public class StudentMain {
 			}
 		}
 	}
+	//delete
 	private static String deleteStudent(StudentComponent studentsList, String message) {
 		boolean flag = false;
 		for(int i=0; i < studentsList.vStudent.size(); i++) {
@@ -70,6 +71,7 @@ public class StudentMain {
 			return "This student is not exist";
 		}
 	}
+	//post
 	private static String registerStudent(StudentComponent studentsList, String message) {
 		Student  student = new Student(message);
 		if (!studentsList.isRegisteredStudent(student.studentId)) {
@@ -78,6 +80,7 @@ public class StudentMain {
 		} else
 			return "This student is already registered.";
 	}
+	//get
 	private static String makeStudentList(StudentComponent studentsList) {
 		String returnString = "";
 		for (int j = 0; j < studentsList.vStudent.size(); j++) {

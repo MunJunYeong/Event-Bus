@@ -5,8 +5,9 @@
 package Framework;
 
 public enum EventId {
-    ClientOutput, ListStudents, ListCourses, ListStudentsRegistered, ListCourseRegistered, 
-    ListCoursesCompleted, RegisterStudents, DeleteStudents, RegisterCourses, DeleteCourses, QuitTheSystem,
-    ListReservations, RegisterReservation,
+	ClientOutput, Student, Course, Reservation, QuitTheSystem
+//    ClientOutput, ListStudents, ListCourses, ListStudentsRegistered, ListCourseRegistered, 
+//    ListCoursesCompleted, RegisterStudents, DeleteStudents, RegisterCourses, DeleteCourses, QuitTheSystem,
+//    ListReservations, RegisterReservation,
     
 }

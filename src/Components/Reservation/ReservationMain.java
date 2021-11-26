@@ -34,13 +34,13 @@ public class ReservationMain {
 			EventQueue eventQueue = eventBus.getEventQueue(componentId);
 			for (int i = 0; i < eventQueue.getSize(); i++) {
 				event = eventQueue.getEvent();
-				switch (event.getEventId()) {
-				case ListReservations :
+				switch (event.getApi()) {
+				case "get" :
 					printLogEvent("Get", event);
 					System.out.println(reservationList);
 					eventBus.sendEvent(new Event(EventId.ClientOutput, makeReservationList(reservationList)));
 					break;
-				case RegisterReservation :
+				case "post" :
 					printLogEvent("Get", event);
 					eventBus.sendEvent(new Event(EventId.ClientOutput, registerReservation(reservationList, studentsList, coursesList, event.getMessage())));
 					break;
@@ -53,7 +53,6 @@ public class ReservationMain {
 	}
 	
 	
-	@SuppressWarnings("unlikely-arg-type")
 	private static String registerReservation(ReservationComponent reservationList, StudentComponent studentsList, CourseComponent coursesList, String message) {
 		boolean sFlag = false;
 		boolean cFlag = false;

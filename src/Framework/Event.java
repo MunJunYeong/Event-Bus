@@ -10,19 +10,24 @@ public class Event implements Serializable {
     private static final long serialVersionUID = 1L; //Default serializable value  
     private String message;
 	private EventId eventId;
+	private String api;
 
 	public Event(EventId id, String text ) {
 		this.message = text;
 		this.eventId = id;
 	}
-	public Event(EventId id ) {
+	public Event(EventId id, Object object, String api) {
 		this.message = null;
 		this.eventId = id;
+		this.api = api;
 	}
 	public EventId getEventId() {
 		return eventId;
 	}
 	public String getMessage() {
 		return message;
+	}
+	public String getApi() {
+		return api;
 	}
 }
