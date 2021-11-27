@@ -7,6 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 import Framework.Event;
 import Framework.EventId;
@@ -23,28 +25,29 @@ public class CourseMain {
 		Event event = null;
 		boolean done = false;
 		while (!done) {
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
 			EventQueue eventQueue = eventBus.getEventQueue(componentId);
 			for (int i = 0; i < eventQueue.getSize(); i++) {
 				event = eventQueue.getEvent();
-				switch (event.getApi()) {
-				case "get":
-					printLogEvent("Get", event);
-					eventBus.sendEvent(new Event(EventId.ClientOutput, makeCourseList(coursesList)));
+				switch (event.getEventId()) {
+				case Course:
+					if(event.getApi().equals("getCourse")) {
+						printLogEvent("Get", event);
+						eventBus.sendEvent(new Event(EventId.ClientOutput, makeCourseList(coursesList)));
+					}
+					if(event.getApi().equals("postCourse")) {
+						printLogEvent("Get", event);
+						eventBus.sendEvent(new Event(EventId.ClientOutput, registerCourse(coursesList, event.getMessage())));
+					}
+					if(event.getApi().equals("deleteCourse")) {
+						printLogEvent("Get", event);
+						eventBus.sendEvent(new Event(EventId.ClientOutput, deleteCourse(coursesList, event.getMessage())));
+					}
+					if(event.getApi().equals("checkCourse")) {
+						printLogEvent("Get", event);
+						eventBus.sendEvent(new Event(EventId.Reservation, checkgetCourse(coursesList, event.getMessage()), "finishReservation"));
+					}
 					break;
-				case "post":
-					printLogEvent("Get", event);
-					eventBus.sendEvent(new Event(EventId.ClientOutput, registerCourse(coursesList, event.getMessage())));
-					break;
-				case "delete":
-					printLogEvent("Get", event);
-					eventBus.sendEvent(new Event(EventId.ClientOutput, deleteCourse(coursesList, event.getMessage())));
-					break;
-				case "quit":
+				case QuitTheSystem:
 					eventBus.unRegister(componentId);
 					done = true;
 					break;
@@ -54,10 +57,54 @@ public class CourseMain {
 			}
 		}
 	}
+	private static String checkgetCourse(CourseComponent coursesList, String message) {
+		if(message.equals("fail id")) {
+			return "fail id";
+		}
+		boolean existCourseId = false;;
+		StringTokenizer stringTokenizer = new StringTokenizer(message);
+		String studentId = stringTokenizer.nextToken();
+		String courseId = stringTokenizer.nextToken();
+		ArrayList<String> studentCompletedCourse = new ArrayList<String>();
+		while (stringTokenizer.hasMoreTokens()) {
+			studentCompletedCourse.add(stringTokenizer.nextToken());
+		}
+		
+		ArrayList<String> completedCourseList =null;
+		for(int i=0; i<coursesList.vCourse.size(); i++) {
+			if(coursesList.vCourse.get(i).courseId.equals(courseId)) {
+				completedCourseList = coursesList.getCompletedCourseList(courseId);
+				existCourseId = true;
+			}
+		}
+		if(!existCourseId) {
+			return "fail pw";
+		}
+	
+		boolean rFlag =false;
+		
+		if(completedCourseList.size() == 0) {
+			rFlag=true;
+		}else {
+			for(int i = 0; i < completedCourseList.size(); i++) {
+				for(int j=0; j<studentCompletedCourse.size(); j++) {
+					if(completedCourseList.get(i).contains(studentCompletedCourse.get(j))) {
+						rFlag=true;
+					}
+				}
+			}
+		}
+		System.out.println(rFlag);
+		if(rFlag) {
+			return studentId+ " " +courseId;
+		}else {
+			return "not fulfill reservation";
+		}
+	}
 	private static String deleteCourse(CourseComponent coursesList, String message) {
 		boolean flag = false;
 		for(int i=0; i < coursesList.vCourse.size(); i++) {
-			if(coursesList.vCourse.get(i).courseId == message) {
+			if(coursesList.vCourse.get(i).courseId.equals(message)) {
 				coursesList.vCourse.remove(i);
 				flag = true;
 			}

@@ -8,18 +8,19 @@ import java.io.Serializable;
 
 public class Event implements Serializable {
     private static final long serialVersionUID = 1L; //Default serializable value  
-    private String message;
 	private EventId eventId;
+	private String message;
 	private String api;
 
-	public Event(EventId id, String text ) {
+	public Event(EventId id, String text, String api) {
 		this.message = text;
 		this.eventId = id;
-	}
-	public Event(EventId id, Object object, String api) {
-		this.message = null;
-		this.eventId = id;
 		this.api = api;
+	}
+	public Event(EventId clientoutput, String makeStudentList) {
+		this.message = makeStudentList;
+		this.eventId = clientoutput;
+		this.api = "output";
 	}
 	public EventId getEventId() {
 		return eventId;

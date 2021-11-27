@@ -27,35 +27,35 @@ public class ClientInputMain {
 			try {
 				switch (new BufferedReader(new InputStreamReader(System.in)).readLine().trim()) {
 				case "1":
-					eventBus.sendEvent(new Event(EventId.Student, null, "get"));
+					eventBus.sendEvent(new Event(EventId.Student, null, "getStudent"));
 					printLogSend(EventId.Student);
 					break;
 				case "2":
-					eventBus.sendEvent(new Event(EventId.Course, null, "get"));
+					eventBus.sendEvent(new Event(EventId.Course, null, "getCourse"));
 					printLogSend(EventId.Course);
 					break;
 				case "3":
-					eventBus.sendEvent(new Event(EventId.Student, makeStudentInfo(), "post"));
+					eventBus.sendEvent(new Event(EventId.Student, makeStudentInfo(), "postStudent"));
 					printLogSend(EventId.Student);
 					break;
 				case "4":
-					eventBus.sendEvent(new Event(EventId.Course, makeCourseInfo(), "post"));
+					eventBus.sendEvent(new Event(EventId.Course, makeCourseInfo(), "postCourse"));
 					printLogSend(EventId.Course);
 					break;
 				case "5":
-					eventBus.sendEvent(new Event(EventId.Student, deleteStudent(), "delete"));
+					eventBus.sendEvent(new Event(EventId.Student, deleteStudent(), "deleteStudent"));
 					printLogSend(EventId.Student);
 					break;
 				case "6":
-					eventBus.sendEvent(new Event(EventId.Course, deleteCourse(), "delete"));
+					eventBus.sendEvent(new Event(EventId.Course, deleteCourse(), "deleteCourse"));
 					printLogSend(EventId.Course);
 					break;
 				case "7":
-					eventBus.sendEvent(new Event(EventId.Reservation, null, "get"));
+					eventBus.sendEvent(new Event(EventId.Reservation, null, "getReservation"));
 					printLogSend(EventId.Reservation);
 					break;
 				case "8":
-					eventBus.sendEvent(new Event(EventId.Reservation, makeReservationInfo(), "post"));
+					eventBus.sendEvent(new Event(EventId.Reservation, makeReservationInfo(), "postReservation"));
 					printLogSend(EventId.Reservation);
 					break;
 				case "0":

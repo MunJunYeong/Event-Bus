@@ -8,6 +8,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 import Framework.Event;
 import Framework.EventId;
@@ -15,7 +17,7 @@ import Framework.EventQueue;
 import Framework.RMIEventBus;
 
 public class StudentMain {
-	public static void main(String args[]) throws FileNotFoundException, IOException, NotBoundException {
+	public static void main(String args[]) throws FileNotFoundException, IOException, NotBoundException, InterruptedException {
 		RMIEventBus eventBus = (RMIEventBus) Naming.lookup("EventBus");
 		long componentId = eventBus.register();
 		System.out.println("** StudentMain(ID:" + componentId + ") is successfully registered. \n");
@@ -24,28 +26,30 @@ public class StudentMain {
 		Event event = null;
 		boolean done = false;
 		while (!done) {
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
 			EventQueue eventQueue = eventBus.getEventQueue(componentId);
 			for (int i = 0; i < eventQueue.getSize(); i++) {
 				event = eventQueue.getEvent();
-				switch (event.getApi()) {
-				case "get":
-					printLogEvent("Get", event);
-					eventBus.sendEvent(new Event(EventId.ClientOutput, makeStudentList(studentsList)));
+				switch (event.getEventId()) {
+				case Student:
+					if(event.getApi().equals("getStudent")) {
+						printLogEvent("Get", event);
+						eventBus.sendEvent(new Event(EventId.ClientOutput, makeStudentList(studentsList)));
+					}
+					if(event.getApi().equals("postStudent")) {
+						printLogEvent("Get", event);
+						eventBus.sendEvent(new Event(EventId.ClientOutput, registerStudent(studentsList, event.getMessage())));
+					}
+					if(event.getApi().equals("deleteStudent")) {
+						printLogEvent("Get", event);
+						eventBus.sendEvent(new Event(EventId.ClientOutput, deleteStudent(studentsList, event.getMessage())));
+					}
+					if(event.getApi().equals("checkStudent")) {
+						printLogEvent("Get", event);
+						eventBus.sendEvent(new Event(EventId.Course, checkGetCourse(studentsList, event.getMessage()), "checkCourse"));
+					}
+					
 					break;
-				case "post":
-					printLogEvent("Get", event);
-					eventBus.sendEvent(new Event(EventId.ClientOutput, registerStudent(studentsList, event.getMessage())));
-					break;
-				case "delete":
-					printLogEvent("Get", event);
-					eventBus.sendEvent(new Event(EventId.ClientOutput, deleteStudent(studentsList, event.getMessage())));
-					break;
-				case "quit":
+				case QuitTheSystem:
 					printLogEvent("Get", event);
 					eventBus.unRegister(componentId);
 					done = true;
@@ -55,6 +59,29 @@ public class StudentMain {
 				}
 			}
 		}
+	}
+	private static String checkGetCourse(StudentComponent studentsList, String message) {
+		StringTokenizer stringTokenizer = new StringTokenizer(message);
+		String student = stringTokenizer.nextToken();
+		String course = stringTokenizer.nextToken();
+		boolean flag = false;
+		ArrayList<String> stuCourseList = null;
+		for(int i=0; i< studentsList.vStudent.size(); i++) {
+			if(studentsList.vStudent.get(i).studentId.equals(student)) {
+				stuCourseList = studentsList.getCompletedCourseList(student);
+				flag = true;
+			}
+		}
+		if(!flag) {
+			return "fail id"; //존재하는 아이디가 없을 경우 
+		}
+		
+		String str = "";
+		for(String list : stuCourseList) {
+			str += list + " ";
+		}
+		return student+ " " +course + " " + str;
+		
 	}
 	//delete
 	private static String deleteStudent(StudentComponent studentsList, String message) {
