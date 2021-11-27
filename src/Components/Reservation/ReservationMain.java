@@ -29,11 +29,6 @@ public class ReservationMain {
 						printLogEvent("Get", event);
 						eventBus.sendEvent(new Event(EventId.ClientOutput, makeReservationList(reservationList)));
 					}
-					if(event.getApi().equals("postReservation")) {
-						printLogEvent("Get", event);
-						
-						eventBus.sendEvent(new Event(EventId.Student, checkStudent(event.getMessage()), "checkStudent"));
-					}
 					if(event.getApi().equals("finishReservation")){
 						printLogEvent("Get", event);
 						eventBus.sendEvent(new Event(EventId.ClientOutput, postReservation(event.getMessage(), reservationList)));
@@ -51,20 +46,16 @@ public class ReservationMain {
 		}
 
 	private static String postReservation(String message, ReservationComponent reservationList) {
-		if(message.equals("fail id")) {
-			return "fail id";
+		if(message.equals("fail studentId")) {
+			return "fail studentId";
 		}
-		if(message.equals("fail pw")) {
-			return "fail pw";
+		if(message.equals("fail courseId")) {
+			return "fail courseId";
 		}
 		System.out.println(message);
 		Reservation res = new Reservation(message);
 		reservationList.vReservation.add(res);
 		return "success registry reservation";
-	}
-
-	private static String checkStudent(String string) {
-		return string;
 	}
 
 	private static String makeReservationList(ReservationComponent reservationList) {

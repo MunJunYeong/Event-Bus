@@ -58,8 +58,8 @@ public class CourseMain {
 		}
 	}
 	private static String checkgetCourse(CourseComponent coursesList, String message) {
-		if(message.equals("fail id")) {
-			return "fail id";
+		if(message.equals("fail studentId")) {
+			return "fail studentId";
 		}
 		boolean existCourseId = false;;
 		StringTokenizer stringTokenizer = new StringTokenizer(message);
@@ -78,7 +78,7 @@ public class CourseMain {
 			}
 		}
 		if(!existCourseId) {
-			return "fail pw";
+			return "fail courseId";
 		}
 	
 		boolean rFlag =false;

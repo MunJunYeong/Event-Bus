@@ -60,6 +60,7 @@ public class StudentMain {
 			}
 		}
 	}
+	//Student id
 	private static String checkGetCourse(StudentComponent studentsList, String message) {
 		StringTokenizer stringTokenizer = new StringTokenizer(message);
 		String student = stringTokenizer.nextToken();
@@ -73,7 +74,7 @@ public class StudentMain {
 			}
 		}
 		if(!flag) {
-			return "fail id"; //존재하는 아이디가 없을 경우 
+			return "fail studentId"; //존재하는 아이디가 없을 경우 
 		}
 		
 		String str = "";

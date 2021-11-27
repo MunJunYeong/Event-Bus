@@ -55,8 +55,9 @@ public class ClientInputMain {
 					printLogSend(EventId.Reservation);
 					break;
 				case "8":
-					eventBus.sendEvent(new Event(EventId.Reservation, makeReservationInfo(), "postReservation"));
-					printLogSend(EventId.Reservation);
+					//Student > Course > Reservation
+					eventBus.sendEvent(new Event(EventId.Student, makeReservationInfo(), "checkStudent"));
+					printLogSend(EventId.Student);
 					break;
 				case "0":
 					eventBus.sendEvent(new Event(EventId.QuitTheSystem, "Quit the system!!!", "quit"));
