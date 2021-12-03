@@ -30,23 +30,21 @@ public class StudentMain {
 			for (int i = 0; i < eventQueue.getSize(); i++) {
 				event = eventQueue.getEvent();
 				switch (event.getEventId()) {
-				case Student:
-					if(event.getApi().equals("getStudent")) {
-						printLogEvent("Get", event);
-						eventBus.sendEvent(new Event(EventId.ClientOutput, makeStudentList(studentsList)));
-					}
-					if(event.getApi().equals("postStudent")) {
-						printLogEvent("Get", event);
-						eventBus.sendEvent(new Event(EventId.ClientOutput, registerStudent(studentsList, event.getMessage())));
-					}
-					if(event.getApi().equals("deleteStudent")) {
-						printLogEvent("Get", event);
-						eventBus.sendEvent(new Event(EventId.ClientOutput, deleteStudent(studentsList, event.getMessage())));
-					}
-					if(event.getApi().equals("checkStudent")) {
-						printLogEvent("Get", event);
-						eventBus.sendEvent(new Event(EventId.Course, checkGetCourse(studentsList, event.getMessage()), "checkCourse"));
-					}
+				case ListStudents:
+					printLogEvent("Get", event);
+					eventBus.sendEvent(new Event(EventId.ClientOutput, makeStudentList(studentsList)));
+					break;
+				case RegisterStudents:
+					printLogEvent("Get", event);
+					eventBus.sendEvent(new Event(EventId.ClientOutput, registerStudent(studentsList, event.getMessage())));
+				case DeleteStudents:
+					printLogEvent("Get", event);
+					eventBus.sendEvent(new Event(EventId.ClientOutput, deleteStudent(studentsList, event.getMessage())));
+					
+				case checkStudentReservation:
+					printLogEvent("Get", event);
+					eventBus.sendEvent(new Event(EventId.checkCourseReservation, checkGetCourse(studentsList, event.getMessage())));
+					
 					
 					break;
 				case QuitTheSystem:
@@ -63,25 +61,25 @@ public class StudentMain {
 	//Student id
 	private static String checkGetCourse(StudentComponent studentsList, String message) {
 		StringTokenizer stringTokenizer = new StringTokenizer(message);
-		String student = stringTokenizer.nextToken();
-		String course = stringTokenizer.nextToken();
+		String studentId = stringTokenizer.nextToken();
+		String courseId = stringTokenizer.nextToken();
 		boolean flag = false;
 		ArrayList<String> stuCourseList = null;
 		for(int i=0; i< studentsList.vStudent.size(); i++) {
-			if(studentsList.vStudent.get(i).studentId.equals(student)) {
-				stuCourseList = studentsList.getCompletedCourseList(student);
+			if(studentsList.vStudent.get(i).studentId.equals(studentId)) {
+				stuCourseList = studentsList.getCompletedCourseList(studentId);
 				flag = true;
 			}
 		}
 		if(!flag) {
-			return "fail studentId"; //존재하는 아이디가 없을 경우 
+			return "1"; //존재하는 아이디가 없을 경우 
 		}
 		
 		String str = "";
 		for(String list : stuCourseList) {
 			str += list + " ";
 		}
-		return student+ " " +course + " " + str;
+		return studentId+ " " +courseId + " " + str;
 		
 	}
 	//delete
@@ -108,9 +106,14 @@ public class StudentMain {
 		} else
 			return "This student is already registered.";
 	}
+	
 	//get
 	private static String makeStudentList(StudentComponent studentsList) {
 		String returnString = "";
+		if(studentsList.vStudent.size() == 0 ) {
+			return "No StudentList";
+		}
+		
 		for (int j = 0; j < studentsList.vStudent.size(); j++) {
 			returnString += studentsList.getStudentList().get(j).getString() + "\n";
 		}

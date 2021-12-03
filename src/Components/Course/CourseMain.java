@@ -29,24 +29,22 @@ public class CourseMain {
 			for (int i = 0; i < eventQueue.getSize(); i++) {
 				event = eventQueue.getEvent();
 				switch (event.getEventId()) {
-				case Course:
-					if(event.getApi().equals("getCourse")) {
-						printLogEvent("Get", event);
-						eventBus.sendEvent(new Event(EventId.ClientOutput, makeCourseList(coursesList)));
-					}
-					if(event.getApi().equals("postCourse")) {
-						printLogEvent("Get", event);
-						eventBus.sendEvent(new Event(EventId.ClientOutput, registerCourse(coursesList, event.getMessage())));
-					}
-					if(event.getApi().equals("deleteCourse")) {
-						printLogEvent("Get", event);
-						eventBus.sendEvent(new Event(EventId.ClientOutput, deleteCourse(coursesList, event.getMessage())));
-					}
-					if(event.getApi().equals("checkCourse")) {
-						printLogEvent("Get", event);
-						eventBus.sendEvent(new Event(EventId.Reservation, checkgetCourse(coursesList, event.getMessage()), "finishReservation"));
-					}
+				case ListCourses:
+					printLogEvent("Get", event);
+					eventBus.sendEvent(new Event(EventId.ClientOutput, makeCourseList(coursesList)));
+				case RegisterCourses :
+					printLogEvent("Get", event);
+					eventBus.sendEvent(new Event(EventId.ClientOutput, registerCourse(coursesList, event.getMessage())));
+					
+				case DeleteCourses :
+					printLogEvent("Get", event);
+					eventBus.sendEvent(new Event(EventId.ClientOutput, deleteCourse(coursesList, event.getMessage())));
+					
+				case checkCourseReservation :
+					printLogEvent("Get", event);
+					eventBus.sendEvent(new Event(EventId.RegisterReservation, checkgetCourse(coursesList, event.getMessage())));
 					break;
+					
 				case QuitTheSystem:
 					eventBus.unRegister(componentId);
 					done = true;
@@ -58,10 +56,10 @@ public class CourseMain {
 		}
 	}
 	private static String checkgetCourse(CourseComponent coursesList, String message) {
-		if(message.equals("fail studentId")) {
-			return "fail studentId";
+		if(message.equals("1")) {
+			return "1";
 		}
-		boolean existCourseId = false;;
+		boolean existCourseId = false;
 		StringTokenizer stringTokenizer = new StringTokenizer(message);
 		String studentId = stringTokenizer.nextToken();
 		String courseId = stringTokenizer.nextToken();
@@ -78,9 +76,8 @@ public class CourseMain {
 			}
 		}
 		if(!existCourseId) {
-			return "fail courseId";
+			return "2";
 		}
-	
 		boolean rFlag =false;
 		
 		if(completedCourseList.size() == 0) {
@@ -94,11 +91,10 @@ public class CourseMain {
 				}
 			}
 		}
-		System.out.println(rFlag);
 		if(rFlag) {
 			return studentId+ " " +courseId;
 		}else {
-			return "not fulfill reservation";
+			return "3";
 		}
 	}
 	private static String deleteCourse(CourseComponent coursesList, String message) {
@@ -125,6 +121,9 @@ public class CourseMain {
 	}
 	private static String makeCourseList(CourseComponent coursesList) {
 		String returnString = "";
+		if(coursesList.vCourse.size() == 0 ) {
+			return "No CourseList";
+		}
 		for (int j = 0; j < coursesList.vCourse.size(); j++) {
 			returnString += coursesList.getCourseList().get(j).getString() + "\n";
 		}

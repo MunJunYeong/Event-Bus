@@ -24,15 +24,12 @@ public class ReservationMain {
 			for (int i = 0; i < eventQueue.getSize(); i++) {
 				event = eventQueue.getEvent();
 				switch (event.getEventId()) {
-				case Reservation:
-					if(event.getApi().equals("getReservation")) {
+				case ListReservations:
 						printLogEvent("Get", event);
 						eventBus.sendEvent(new Event(EventId.ClientOutput, makeReservationList(reservationList)));
-					}
-					if(event.getApi().equals("finishReservation")){
+				case RegisterReservation:
 						printLogEvent("Get", event);
 						eventBus.sendEvent(new Event(EventId.ClientOutput, postReservation(event.getMessage(), reservationList)));
-					}
 					break;
 				case QuitTheSystem :
 					eventBus.unRegister(componentId);
@@ -46,13 +43,15 @@ public class ReservationMain {
 		}
 
 	private static String postReservation(String message, ReservationComponent reservationList) {
-		if(message.equals("fail studentId")) {
-			return "fail studentId";
+		if(message.equals("1")) {
+			return "not exist studentId";
 		}
-		if(message.equals("fail courseId")) {
-			return "fail courseId";
+		if(message.equals("2")) {
+			return "not exist courseId";
 		}
-		System.out.println(message);
+		if(message.equals("3")) {
+			return "not fulfill reservation";
+		}
 		Reservation res = new Reservation(message);
 		reservationList.vReservation.add(res);
 		return "success registry reservation";
@@ -60,6 +59,9 @@ public class ReservationMain {
 
 	private static String makeReservationList(ReservationComponent reservationList) {
 		String returnString = "";
+		if(reservationList.vReservation.size() ==0) {
+			return "No ReservationList";
+		}
 		for (int j = 0; j < reservationList.vReservation.size(); j++) {
 			returnString += reservationList.getReservation().get(j).getString() + "\n";
 		}
