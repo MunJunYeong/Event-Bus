@@ -68,7 +68,6 @@ public class CourseMain {
 		while (stringTokenizer.hasMoreTokens()) {
 			studentCompletedCourse.add(stringTokenizer.nextToken());
 		}
-		
 		ArrayList<String> completedCourseList =null;
 		for(int i=0; i<coursesList.vCourse.size(); i++) {
 			if(coursesList.vCourse.get(i).courseId.equals(courseId)) {

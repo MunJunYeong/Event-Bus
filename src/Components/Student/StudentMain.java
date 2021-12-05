@@ -73,13 +73,11 @@ public class StudentMain {
 		if(!flag) {
 			return "1"; //존재하는 아이디가 없을 경우 
 		}
-		
 		String str = "";
 		for(String list : stuCourseList) {
 			str += list + " ";
 		}
 		return studentId+ " " +courseId + " " + str;
-		
 	}
 	//delete
 	private static String deleteStudent(StudentComponent studentsList, String message) {
