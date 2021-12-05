@@ -8,6 +8,6 @@ public enum EventId {
 	ClientOutput, QuitTheSystem, 
 	ListStudents, RegisterStudents, DeleteStudents,
 	ListCourses, RegisterCourses, DeleteCourses,
-	ListReservations, checkStudentReservation, checkCourseReservation, RegisterReservation
-    
+	ListReservations, checkStudentReservation, checkCourseReservation, RegisterReservation,
+    ThrowError, DeleteReservation,
 }

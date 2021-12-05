@@ -3,6 +3,7 @@ package Components.Reservation;
 import java.io.IOException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
+import java.util.StringTokenizer;
 
 import Framework.Event;
 import Framework.EventId;
@@ -25,11 +26,16 @@ public class ReservationMain {
 				event = eventQueue.getEvent();
 				switch (event.getEventId()) {
 				case ListReservations:
-						printLogEvent("Get", event);
-						eventBus.sendEvent(new Event(EventId.ClientOutput, makeReservationList(reservationList)));
+					printLogEvent("Get", event);
+					eventBus.sendEvent(new Event(EventId.ClientOutput, makeReservationList(reservationList)));
+					break;
 				case RegisterReservation:
-						printLogEvent("Get", event);
-						eventBus.sendEvent(new Event(EventId.ClientOutput, postReservation(event.getMessage(), reservationList)));
+					printLogEvent("Get", event);
+					eventBus.sendEvent(new Event(EventId.ClientOutput, postReservation(event.getMessage(), reservationList)));
+					break;
+				case DeleteReservation :
+					printLogEvent("Get", event);
+					eventBus.sendEvent(new Event(EventId.ClientOutput, deleteReservation(event.getMessage(), reservationList)));
 					break;
 				case QuitTheSystem :
 					eventBus.unRegister(componentId);
@@ -42,6 +48,19 @@ public class ReservationMain {
 			}
 		}
 
+	private static String deleteReservation(String message, ReservationComponent reservationList) {
+		StringTokenizer stringTokenizer = new StringTokenizer(message);
+		String studentId = stringTokenizer.nextToken();
+		String courseId = stringTokenizer.nextToken();
+		for(int i=0; i<reservationList.vReservation.size(); i++) {
+			if(reservationList.vReservation.get(i).studentId.equals(studentId)&& reservationList.vReservation.get(i).courseId.equals(courseId) ) {
+				reservationList.vReservation.remove(i);
+				return "This reservation is successfully deleted";
+			}
+		}
+		return "Student ID & Course ID is not exist";
+	}
+
 	private static String postReservation(String message, ReservationComponent reservationList) {
 		if(message.equals("1")) {
 			return "not exist studentId";
@@ -51,6 +70,14 @@ public class ReservationMain {
 		}
 		if(message.equals("3")) {
 			return "not fulfill reservation";
+		}
+		StringTokenizer stringTokenizer = new StringTokenizer(message);
+		String studentId = stringTokenizer.nextToken();
+		String courseId = stringTokenizer.nextToken();
+		for(int i=0; i<reservationList.vReservation.size(); i++) {
+			if(reservationList.vReservation.get(i).studentId.equals(studentId)&& reservationList.vReservation.get(i).courseId.equals(courseId) ) {
+				return "duplicated reservation data";
+			}
 		}
 		Reservation res = new Reservation(message);
 		reservationList.vReservation.add(res);

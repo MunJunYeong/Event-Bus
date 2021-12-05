@@ -37,15 +37,14 @@ public class StudentMain {
 				case RegisterStudents:
 					printLogEvent("Get", event);
 					eventBus.sendEvent(new Event(EventId.ClientOutput, registerStudent(studentsList, event.getMessage())));
+					break;
 				case DeleteStudents:
 					printLogEvent("Get", event);
 					eventBus.sendEvent(new Event(EventId.ClientOutput, deleteStudent(studentsList, event.getMessage())));
-					
+					break;
 				case checkStudentReservation:
 					printLogEvent("Get", event);
 					eventBus.sendEvent(new Event(EventId.checkCourseReservation, checkGetCourse(studentsList, event.getMessage())));
-					
-					
 					break;
 				case QuitTheSystem:
 					printLogEvent("Get", event);
@@ -113,7 +112,6 @@ public class StudentMain {
 		if(studentsList.vStudent.size() == 0 ) {
 			return "No StudentList";
 		}
-		
 		for (int j = 0; j < studentsList.vStudent.size(); j++) {
 			returnString += studentsList.getStudentList().get(j).getString() + "\n";
 		}

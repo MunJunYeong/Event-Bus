@@ -59,6 +59,10 @@ public class ClientInputMain {
 					eventBus.sendEvent(new Event(EventId.checkStudentReservation, makeReservationInfo()));
 					printLogSend(EventId.checkStudentReservation);
 					break;
+				case "9":
+					eventBus.sendEvent(new Event(EventId.DeleteReservation, deleteReservation()));
+					printLogSend(EventId.DeleteReservation);
+					break;
 				case "0":
 					eventBus.sendEvent(new Event(EventId.QuitTheSystem, "Quit the system!!!"));
 					printLogSend(EventId.QuitTheSystem);
@@ -72,6 +76,17 @@ public class ClientInputMain {
 				e.printStackTrace();
 			}
 		}
+	}
+	private static String deleteReservation() throws IOException {
+		String studentId = "";
+		String courseId = "";
+		System.out.println("\nEnter Student ID and press return (Ex. 20131234)>> ");
+		studentId = new BufferedReader(new InputStreamReader(System.in)).readLine().trim();
+		System.out.println("\nEnter Course ID and press return (Ex. 12345)>> ");
+		courseId = new BufferedReader(new InputStreamReader(System.in)).readLine().trim();
+		System.out.println("\n ** Message :" + studentId + "\n");
+		return studentId + " " + courseId;
+		
 	}
 	private static String makeReservationInfo() throws IOException {
 		String studentId = "";
@@ -149,6 +164,7 @@ public class ClientInputMain {
 		System.out.println("6. Delete Course");
 		System.out.println("7. List Reservation");
 		System.out.println("8. Register Reservation");
+		System.out.println("9. Delete Reservation");
 		System.out.println("0. Quit the system");
 		System.out.print("\n Choose No.: ");
 	}

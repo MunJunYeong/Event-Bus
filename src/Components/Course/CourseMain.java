@@ -32,14 +32,15 @@ public class CourseMain {
 				case ListCourses:
 					printLogEvent("Get", event);
 					eventBus.sendEvent(new Event(EventId.ClientOutput, makeCourseList(coursesList)));
+					break;
 				case RegisterCourses :
 					printLogEvent("Get", event);
 					eventBus.sendEvent(new Event(EventId.ClientOutput, registerCourse(coursesList, event.getMessage())));
-					
+					break;
 				case DeleteCourses :
 					printLogEvent("Get", event);
 					eventBus.sendEvent(new Event(EventId.ClientOutput, deleteCourse(coursesList, event.getMessage())));
-					
+					break;
 				case checkCourseReservation :
 					printLogEvent("Get", event);
 					eventBus.sendEvent(new Event(EventId.RegisterReservation, checkgetCourse(coursesList, event.getMessage())));
